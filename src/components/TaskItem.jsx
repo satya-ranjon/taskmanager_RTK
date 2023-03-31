@@ -1,14 +1,36 @@
 import React, { useState } from "react";
+import {
+  useDeleteTaskMutation,
+  useUpdateTaskMutation,
+} from "../features/tasks/tasksApi";
 import getMonthName from "../utils/getMonthName";
 import DeleteButton from "./ui/DeleteButton";
 import EditButton from "./ui/EditButton";
 
 export const TaskItem = ({ task }) => {
-  const { taskName, teamMember, project, deadline, status } = task || {};
+  const { taskName, teamMember, project, deadline, status, id } = task || {};
   const { name, avatar } = teamMember || {};
   const { projectName, colorClass } = project || {};
 
   const [selectStatus, setSelectStatus] = useState(status);
+
+  // Update Task Status
+  const [updateTask] = useUpdateTaskMutation();
+
+  const handleUpdateStatus = (e) => {
+    const { value } = e.target;
+    setSelectStatus(value);
+    if (value) {
+      updateTask({ id: id, data: { ...task, status: value } });
+    }
+  };
+
+  // Delete Task
+
+  const [deleteTask] = useDeleteTaskMutation();
+  const handleDeleteTask = () => {
+    deleteTask(id);
+  };
 
   return (
     <div className="lws-task">
@@ -27,12 +49,16 @@ export const TaskItem = ({ task }) => {
           <img src={avatar} className="team-avater" />
           <p className="lws-task-assignedOn">{name}</p>
         </div>
-        {selectStatus == "completed" ? <DeleteButton /> : <EditButton />}
+        {selectStatus == "completed" ? (
+          <DeleteButton onClick={handleDeleteTask} />
+        ) : (
+          <EditButton />
+        )}
 
         <select
           className="lws-status"
           defaultValue={selectStatus}
-          onChange={(e) => setSelectStatus(e.target.value)}>
+          onChange={handleUpdateStatus}>
           <option value="pending">Pending</option>
           <option value="inProgress">In Progress</option>
           <option value="completed">Completed</option>

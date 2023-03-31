@@ -85,7 +85,6 @@ const AddTask = () => {
     } else if (!inputValue.deadline) {
       setError(" Add Dead Line");
     } else {
-      console.log(inputValue);
       addTask(inputValue);
     }
   };
