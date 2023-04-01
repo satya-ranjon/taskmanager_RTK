@@ -1,0 +1,231 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "projectName": "Scoreboard",
+      "colorClass": "color-scoreboard"
+    },
+    {
+      "id": 2,
+      "projectName": "Flight Booking",
+      "colorClass": "color-flight"
+    },
+    {
+      "id": 3,
+      "projectName": "Product Cart",
+      "colorClass": "color-productCart"
+    },
+    {
+      "id": 4,
+      "projectName": "Book Store",
+      "colorClass": "color-bookstore"
+    },
+    {
+      "id": 5,
+      "projectName": "Blog Application",
+      "colorClass": "color-blog"
+    },
+    {
+      "id": 6,
+      "projectName": "Job Finder",
+      "colorClass": "color-jobFinder"
+    }
+  ],
+  "team": [
+    {
+      "name": "Sumit Saha",
+      "avatar": "/images/avatars/sumit.png",
+      "id": 1
+    },
+    {
+      "name": "Saad Hasan",
+      "avatar": "/images/avatars/sadh.png",
+      "id": 2
+    },
+    {
+      "name": "Akash Ahmed",
+      "avatar": "/images/avatars/akash.png",
+      "id": 3
+    },
+    {
+      "name": "Md Salahuddin",
+      "avatar": "/images/avatars/salahuddin.png",
+      "id": 4
+    },
+    {
+      "name": "Riyadh Hassan",
+      "avatar": "/images/avatars/riyadh.png",
+      "id": 5
+    },
+    {
+      "name": "Ferdous Hassan",
+      "avatar": "/images/avatars/ferdous.png",
+      "id": 6
+    },
+    {
+      "name": "Arif Almas",
+      "avatar": "/images/avatars/almas.png",
+      "id": 7
+    }
+  ],
+  "tasks": [
+    {
+      "taskName": "Task One",
+      "teamMember": {
+        "name": "Saad Hasan",
+        "avatar": "/images/avatars/sadh.png",
+        "id": 2
+      },
+      "project": {
+        "id": 1,
+        "projectName": "Scoreboard",
+        "colorClass": "color-scoreboard"
+      },
+      "deadline": "2023-11-15",
+      "id": 1,
+      "status": "completed"
+    },
+    {
+      "taskName": "Web Developer",
+      "teamMember": {
+        "name": "Arif Almas",
+        "avatar": "/images/avatars/almas.png",
+        "id": 7
+      },
+      "project": {
+        "id": 3,
+        "projectName": "Product Cart",
+        "colorClass": "color-productCart"
+      },
+      "deadline": "2023-03-04",
+      "id": 2,
+      "status": "completed"
+    },
+    {
+      "taskName": "Ai Art",
+      "teamMember": {
+        "name": "Ferdous Hassan",
+        "avatar": "/images/avatars/ferdous.png",
+        "id": 6
+      },
+      "project": {
+        "id": 3,
+        "projectName": "Product Cart",
+        "colorClass": "color-productCart"
+      },
+      "deadline": "2023-03-04",
+      "id": 3,
+      "status": "completed"
+    },
+    {
+      "taskName": "Ai Art",
+      "teamMember": {
+        "name": "Saad Hasan",
+        "avatar": "/images/avatars/sadh.png",
+        "id": 2
+      },
+      "project": {
+        "id": 5,
+        "projectName": "Blog Application",
+        "colorClass": "color-blog"
+      },
+      "deadline": "2023-03-18",
+      "id": 4,
+      "status": "pending"
+    },
+    {
+      "taskName": "khokon",
+      "teamMember": {
+        "name": "Akash Ahmed",
+        "avatar": "/images/avatars/akash.png",
+        "id": 3
+      },
+      "project": {
+        "id": 2,
+        "projectName": "Flight Booking",
+        "colorClass": "color-flight"
+      },
+      "deadline": "2023-04-19",
+      "id": 5,
+      "status": "pending"
+    },
+    {
+      "taskName": "Web Deginge",
+      "teamMember": {
+        "name": "Md Salahuddin",
+        "avatar": "/images/avatars/salahuddin.png",
+        "id": 4
+      },
+      "project": {
+        "id": 3,
+        "projectName": "Product Cart",
+        "colorClass": "color-productCart"
+      },
+      "deadline": "2023-04-07",
+      "id": 8,
+      "status": "inProgress"
+    },
+    {
+      "taskName": "ML Developer",
+      "teamMember": {
+        "name": "Saad Hasan",
+        "avatar": "/images/avatars/sadh.png",
+        "id": 2
+      },
+      "project": {
+        "id": 1,
+        "projectName": "Scoreboard",
+        "colorClass": "color-scoreboard"
+      },
+      "deadline": "2023-03-30",
+      "id": 9
+    },
+    {
+      "taskName": "3",
+      "teamMember": {
+        "name": "Saad Hasan",
+        "avatar": "/images/avatars/sadh.png",
+        "id": 2
+      },
+      "project": {
+        "id": 4,
+        "projectName": "Book Store",
+        "colorClass": "color-bookstore"
+      },
+      "deadline": "2023-04-27",
+      "id": 10,
+      "status": "inProgress"
+    },
+    {
+      "taskName": "aaa11",
+      "teamMember": {
+        "name": "Akash Ahmed",
+        "avatar": "/images/avatars/akash.png",
+        "id": 3
+      },
+      "project": {
+        "id": 4,
+        "projectName": "Book Store",
+        "colorClass": "color-bookstore"
+      },
+      "deadline": "2023-04-01",
+      "id": 11,
+      "status": "completed"
+    },
+    {
+      "taskName": "22",
+      "teamMember": {
+        "name": "Akash Ahmed",
+        "avatar": "/images/avatars/akash.png",
+        "id": 3
+      },
+      "project": {
+        "id": 4,
+        "projectName": "Book Store",
+        "colorClass": "color-bookstore"
+      },
+      "deadline": "2023-04-07",
+      "id": 12
+    }
+  ]
+}
