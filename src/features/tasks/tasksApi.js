@@ -5,6 +5,10 @@ const tasksApi = apiSlice.injectEndpoints({
     getTasks: builder.query({
       query: () => `/tasks`,
     }),
+    getTask: builder.query({
+      query: (id) => `/tasks/${id}`,
+    }),
+
     addTask: builder.mutation({
       query: (data) => ({
         url: "/tasks",
@@ -27,7 +31,7 @@ const tasksApi = apiSlice.injectEndpoints({
         } catch (err) {}
       },
     }),
-    updateTask: builder.mutation({
+    updateTaskStatus: builder.mutation({
       query: ({ id, data }) => ({
         url: `/tasks/${id}`,
         method: "PATCH",
@@ -68,12 +72,38 @@ const tasksApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    updateTask: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `/tasks/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      async onQueryStarted({ id, data }, { dispatch, queryFulfilled }) {
+        try {
+          const res = await queryFulfilled;
+          // Update cache
+          if (res?.data?.id) {
+            dispatch(
+              apiSlice.util.updateQueryData("getTasks", undefined, (draft) => {
+                let findData = draft?.find((t) => t.id === id);
+                findData.taskName = res?.data?.taskName;
+                findData.teamMember = res?.data?.teamMember;
+                findData.project = res?.data?.project;
+                findData.deadline = res?.data?.deadline;
+              })
+            );
+          }
+        } catch (err) {}
+      },
+    }),
   }),
 });
 
 export const {
   useGetTasksQuery,
   useAddTaskMutation,
-  useUpdateTaskMutation,
+  useUpdateTaskStatusMutation,
   useDeleteTaskMutation,
+  useGetTaskQuery,
+  useUpdateTaskMutation,
 } = tasksApi;

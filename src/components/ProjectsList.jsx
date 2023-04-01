@@ -1,4 +1,10 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetProjectsQuery } from "../features/projects/projectsApi";
+import {
+  filterAddProject,
+  filterRemoveProject,
+} from "../features/projects/projectsSlice";
 
 const ProjectsList = () => {
   const {
@@ -7,6 +13,9 @@ const ProjectsList = () => {
     isLoading,
     isSuccess,
   } = useGetProjectsQuery();
+  const dispatch = useDispatch();
+
+  const { projectId } = useSelector((state) => state.projectsid);
 
   // decided what to render
   let content;
@@ -19,13 +28,34 @@ const ProjectsList = () => {
   if (!isLoading && !isError && isSuccess && projects?.length === 0) {
     content = <h4>Projects Not Found .!</h4>;
   }
-  if (!isLoading && !isError && isSuccess && projects?.length > 0) {
-    content = projects.map((project) => (
-      <div className="checkbox-container" key={project.id}>
-        <input type="checkbox" className={project.colorClass} />
-        <p className="label">{project.projectName}</p>
-      </div>
-    ));
+  if (
+    !isLoading &&
+    !isError &&
+    isSuccess &&
+    projects?.length > 0 &&
+    projectId
+  ) {
+    content = projects.map((project) => {
+      const handleCheck = (e) => {
+        if (e.target.checked) {
+          dispatch(filterAddProject(project.id));
+        }
+        if (!e.target.checked) {
+          dispatch(filterRemoveProject(project.id));
+        }
+      };
+      return (
+        <div className="checkbox-container" key={project.id}>
+          <input
+            type="checkbox"
+            checked={projectId?.indexOf(project.id) !== -1}
+            className={project.colorClass}
+            onChange={handleCheck}
+          />
+          <p className="label">{project.projectName}</p>
+        </div>
+      );
+    });
   }
 
   return (

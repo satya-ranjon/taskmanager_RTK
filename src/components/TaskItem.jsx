@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   useDeleteTaskMutation,
-  useUpdateTaskMutation,
+  useUpdateTaskStatusMutation,
 } from "../features/tasks/tasksApi";
 import getMonthName from "../utils/getMonthName";
 import DeleteButton from "./ui/DeleteButton";
@@ -13,15 +14,16 @@ export const TaskItem = ({ task }) => {
   const { projectName, colorClass } = project || {};
 
   const [selectStatus, setSelectStatus] = useState(status);
+  const navigate = useNavigate();
 
   // Update Task Status
-  const [updateTask] = useUpdateTaskMutation();
+  const [updateTaskStatus] = useUpdateTaskStatusMutation();
 
   const handleUpdateStatus = (e) => {
     const { value } = e.target;
     setSelectStatus(value);
     if (value) {
-      updateTask({ id: id, data: { ...task, status: value } });
+      updateTaskStatus({ id: id, data: { ...task, status: value } });
     }
   };
 
@@ -52,7 +54,7 @@ export const TaskItem = ({ task }) => {
         {selectStatus == "completed" ? (
           <DeleteButton onClick={handleDeleteTask} />
         ) : (
-          <EditButton />
+          <EditButton onClick={() => navigate(`/edit/${id}`)} />
         )}
 
         <select

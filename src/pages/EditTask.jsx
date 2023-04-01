@@ -1,44 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGetProjectsQuery } from "../features/projects/projectsApi";
-import { useAddTaskMutation } from "../features/tasks/tasksApi";
+import {
+  useUpdateTaskMutation,
+  useGetTaskQuery,
+} from "../features/tasks/tasksApi";
 import { useGetTeamsQuery } from "../features/teams/teamsApi";
+
 const initialState = {
   taskName: "",
   teamMember: "",
   project: "",
   deadline: "",
 };
-const AddTask = () => {
+const EditTask = () => {
   // GET teamMember
-  const [teamMemberIsLoad, setTeamMemberIsLoad] = useState(false);
-  const [teamMemberData, setTeamMemberData] = useState();
-  const {
-    data: getTeamMember,
-    isSuccess: getTeamMemberSuccess,
-    isLoading: getTeamMemberIsLoading,
-  } = useGetTeamsQuery(undefined, { skip: !teamMemberIsLoad });
-
-  useEffect(() => {
-    if (getTeamMemberSuccess && getTeamMember?.length > 0) {
-      setTeamMemberData(getTeamMember);
-    }
-  }, [getTeamMemberSuccess]);
+  const { data: getTeamMember, isSuccess: getTeamMemberSuccess } =
+    useGetTeamsQuery();
 
   // GET teamMember
-  const [projectsIsLoad, setProjectsIsLoad] = useState(false);
-  const [projectsData, setProjectsData] = useState();
-  const {
-    data: getProjects,
-    isSuccess: getProjectsSuccess,
-    isLoading: getProjectsIsLoading,
-  } = useGetProjectsQuery(undefined, { skip: !projectsIsLoad });
-
-  useEffect(() => {
-    if (getProjectsSuccess && getProjects?.length > 0) {
-      setProjectsData(getProjects);
-    }
-  }, [getProjectsSuccess]);
+  const { data: getProjects, isSuccess: getProjectsSuccess } =
+    useGetProjectsQuery();
 
   /// Handle Input Data
   const [inputValue, setInputValue] = useState(initialState);
@@ -53,7 +35,7 @@ const AddTask = () => {
 
   const handleTeamMemberSelected = (e) => {
     const { name, value } = e.target;
-    const findTeamMember = teamMemberData?.find((m) => m.id == value);
+    const findTeamMember = getTeamMember?.find((m) => m.id == value);
     setInputValue({
       ...inputValue,
       [name]: findTeamMember,
@@ -61,15 +43,29 @@ const AddTask = () => {
   };
   const handleProjectsSelected = (e) => {
     const { name, value } = e.target;
-    const findProject = projectsData?.find((p) => p.id == value);
+    const findProject = getProjects?.find((p) => p.id == value);
     setInputValue({
       ...inputValue,
       [name]: findProject,
     });
   };
 
+  // Load Existing data
+  const { taskId } = useParams();
+  const { data } = useGetTaskQuery(taskId);
+  useEffect(() => {
+    if (data?.id) {
+      setInputValue({
+        taskName: data?.taskName,
+        teamMember: data?.teamMember,
+        project: data?.project,
+        deadline: data?.deadline,
+      });
+    }
+  }, [data]);
+
   // Send to data server
-  const [addTask, { isSuccess }] = useAddTaskMutation();
+  const [updateTask, { isSuccess }] = useUpdateTaskMutation();
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -85,7 +81,7 @@ const AddTask = () => {
     } else if (!inputValue.deadline) {
       setError(" Add Dead Line");
     } else {
-      addTask(inputValue);
+      updateTask({ id: data?.id, data: inputValue });
     }
   };
 
@@ -97,7 +93,7 @@ const AddTask = () => {
     <div className="container relative">
       <main className="relative z-20 max-w-3xl mx-auto rounded-lg xl:max-w-none">
         <h1 className="mt-4 mb-8 text-3xl font-bold text-center text-gray-800">
-          Create Task for Your Team
+          Edit Task for Your Team
         </h1>
 
         {<h5 className="mt-4 mb-8 text-1xl bg-red text-center ">{error}</h5>}
@@ -110,7 +106,7 @@ const AddTask = () => {
                 name="taskName"
                 id="lws-taskName"
                 // required
-
+                value={inputValue.taskName}
                 placeholder="Implement RTK Query"
                 onChange={handleInputChange}
               />
@@ -121,19 +117,18 @@ const AddTask = () => {
               <select
                 id="lws-projectName"
                 name="teamMember"
+                value={inputValue?.teamMember?.id}
                 // required
-                onChange={handleTeamMemberSelected}
-                onClick={() => setTeamMemberIsLoad(true)}>
+                onChange={handleTeamMemberSelected}>
                 <option value="" hidden>
                   Select Job
                 </option>
                 {getTeamMemberSuccess &&
-                  teamMemberData?.slice().map((team, index) => (
+                  getTeamMember?.slice().map((team, index) => (
                     <option key={index} value={team.id}>
                       {team.name}
                     </option>
                   ))}
-                {getTeamMemberIsLoading && <option>Loading...</option>}
               </select>
             </div>
             <div className="fieldContainer">
@@ -144,18 +139,17 @@ const AddTask = () => {
                 defaultValue=" "
                 id="lws-teamMember"
                 // required
-                onChange={handleProjectsSelected}
-                onClick={() => setProjectsIsLoad(true)}>
+                value={inputValue?.project.id}
+                onChange={handleProjectsSelected}>
                 <option value="" hidden>
                   Select Project
                 </option>
                 {getProjectsSuccess &&
-                  projectsData?.slice().map((project, index) => (
+                  getProjects?.slice().map((project, index) => (
                     <option key={index} value={project.id}>
                       {project.projectName}
                     </option>
                   ))}
-                {getProjectsIsLoading && <option>Loading ...</option>}
               </select>
             </div>
             <div className="fieldContainer">
@@ -163,6 +157,7 @@ const AddTask = () => {
               <input
                 type="date"
                 name="deadline"
+                value={inputValue?.deadline}
                 id="lws-deadline"
                 // required
                 onChange={handleInputChange}
@@ -171,7 +166,7 @@ const AddTask = () => {
 
             <div className="text-right">
               <button type="submit" className="lws-submit">
-                Save
+                Update
               </button>
             </div>
           </form>
@@ -181,4 +176,4 @@ const AddTask = () => {
   );
 };
 
-export default AddTask;
+export default EditTask;

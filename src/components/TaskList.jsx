@@ -1,8 +1,21 @@
+import { useSelector } from "react-redux";
+import { useGetProjectsQuery } from "../features/projects/projectsApi";
 import { useGetTasksQuery } from "../features/tasks/tasksApi";
 import { TaskItem } from "./TaskItem";
 
 const TaskList = () => {
-  const { data: tasks, isError, isLoading, isSuccess } = useGetTasksQuery();
+  const { data, isError, isLoading, isSuccess } = useGetTasksQuery();
+
+  const { projectId } = useSelector((state) => state.projectsid);
+  const { search } = useSelector((state) => state.tasks);
+
+  let tasks = [];
+  if (isSuccess && projectId?.length > 0) {
+    tasks = data.filter((item) => projectId?.indexOf(item?.project?.id) !== -1);
+  }
+  if (search) {
+    tasks = tasks.filter((item) => item.taskName.includes(search));
+  }
 
   // decided what to render
   let content;
